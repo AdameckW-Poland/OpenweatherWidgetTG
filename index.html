@@ -1,22 +1,352 @@
-<!-- OpenWeather Widget - Large with 8-Day Forecast -->
-<link rel="stylesheet" href="//openweathermap.org/themes/openweathermap/assets/vendor/owm/css/style.min.css">
-<script src="//unpkg.com/d3@7.8.5/dist/d3.min.js"></script>
-<div id="openweathermap-widget-11"></div>
-<script type="text/javascript">
-  window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
-  window.myWidgetParam.push({
-    id: 11,
-    cityid: '3083440',
-    appid: 'c94e0184c8831940063ba39fbd296ce2',
-    units: 'metric',
-    containerid: 'openweathermap-widget-11',
-  });
-  (function() {
-    var script = document.createElement('script');
-    script.async = true;
-    script.charset = "utf-8";
-    script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator-2.0.js";
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(script, s);
-  })();
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminal Pogodowy – Radzionków</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --accent:#38bdf8;
+  --text:#f1f5f9;
+  --muted:#94a3b8;
+  --border:rgba(255,255,255,0.08);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:var(--text);
+  height:100dvh;
+  overflow:hidden;
+}
+
+.widget{
+  padding:3vmin;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+/* HEADER */
+
+.header{margin-bottom:2vmin;}
+
+.header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+}
+
+.city{
+  font-size:5vmin;
+  font-weight:900;
+  letter-spacing:3px;
+}
+
+.time{
+  font-size:2.2vmin;
+  color:var(--accent);
+  font-weight:600;
+}
+
+.header-sub{
+  margin-top:1vmin;
+  font-size:1.6vmin;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+}
+
+/* MAIN GRID */
+
+.main-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap:2vmin;
+  margin-bottom:2vmin;
+  height:38vmin;
+}
+
+.box{
+  background:var(--card);
+  border-radius:18px;
+  padding:2.5vmin;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.4);
+  border:1px solid var(--border);
+}
+
+/* TEMPERATURE */
+
+.temp-row{
+  display:flex;
+  align-items:center;
+  gap:3vmin;
+}
+
+.main-icon{
+  width:14vmin;
+  height:14vmin;
+  filter:brightness(1.2);
+}
+
+.main-temp{
+  font-size:11vmin;
+  font-weight:900;
+}
+
+.trend-container{text-align:center;}
+
+.trend-label{
+  font-size:1.2vmin;
+  color:var(--muted);
+}
+
+.temp-trend{
+  font-size:5vmin;
+}
+
+.feels{
+  margin-top:2vmin;
+  font-size:1.8vmin;
+  color:var(--muted);
+}
+
+/* INFO */
+
+.condition{
+  font-size:2.3vmin;
+  font-weight:700;
+  margin-bottom:2vmin;
+  color:var(--accent);
+}
+
+.line{
+  font-size:2vmin;
+  margin-bottom:1vmin;
+  display:flex;
+  align-items:center;
+  gap:1.5vmin;
+}
+
+.w-tag{
+  background:rgba(255,255,255,0.06);
+  padding:0.6vmin 1.2vmin;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  gap:1vmin;
+  font-size:1.7vmin;
+  color:var(--muted);
+}
+
+/* CHART */
+
+.chart-title{
+  font-size:1.4vmin;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:1vmin;
+  letter-spacing:1px;
+}
+
+.chart-area{
+  flex:1;
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+}
+
+.bar{
+  width:100%;
+  background:linear-gradient(to top,var(--accent),#0ea5e9);
+  border-radius:4px;
+  transition:0.3s;
+}
+
+.bar-label{
+  font-size:1vmin;
+  margin-top:6px;
+  color:var(--muted);
+}
+
+/* TABLE */
+
+.f-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.f-table th{
+  text-align:left;
+  font-size:1.5vmin;
+  font-weight:600;
+  color:var(--muted);
+  padding-bottom:1vmin;
+}
+
+.f-table td{
+  padding:1.6vmin 0;
+  border-top:1px solid var(--border);
+}
+
+.f-day-name{
+  font-size:2.5vmin;
+  font-weight:700;
+}
+
+.f-day-date{
+  font-size:1.5vmin;
+  color:var(--muted);
+}
+
+.f-icon{
+  width:5vmin;
+  filter:brightness(1.2);
+}
+
+.f-temp{
+  font-size:3.5vmin;
+  font-weight:700;
+}
+
+#status{color:var(--accent);font-weight:600;}
+</style>
+</head>
+
+<body>
+<div class="widget">
+
+<div class="header">
+  <div class="header-top">
+    <div class="city">RADZIONKÓW</div>
+    <div class="time" id="clock">--:--</div>
+  </div>
+  <div class="header-sub">
+    <div>WSCHÓD: <b id="sunrise">--:--</b> | ZACHÓD: <b id="sunset">--:--</b></div>
+    <div>ŹRÓDŁO: MET NORWAY | STATUS: <span id="status">...</span></div>
+  </div>
+</div>
+
+<div class="main-grid">
+
+<div class="box">
+  <div class="temp-row">
+    <img id="m-icon" class="main-icon" src="">
+    <div>
+      <div class="main-temp" id="m-temp">--°</div>
+      <div class="trend-container">
+        <div class="trend-label">TREND</div>
+        <div class="temp-trend" id="t-trend"></div>
+      </div>
+    </div>
+  </div>
+  <div class="feels">ODCZUWALNA: <span id="f-temp">--</span>°C</div>
+</div>
+
+<div class="box">
+  <div class="condition" id="m-desc">ŁADOWANIE...</div>
+  <div class="line">WIATR: <b id="w-speed">--</b> km/h
+    <div class="w-tag">
+      <svg id="w-arr" width="20" height="20" viewBox="0 0 100 100" style="transition:1s">
+        <path d="M50 5 L65 95 L50 80 L35 95 Z" fill="#94a3b8"/>
+      </svg>
+      <span id="w-meta">--</span>
+    </div>
+  </div>
+  <div class="line">CIŚNIENIE: <b id="press">--</b> hPa</div>
+  <div class="line">WILGOTNOŚĆ: <b id="humid">--</b>%</div>
+</div>
+
+<div class="box">
+  <div class="chart-title">Trend Barometryczny (12h)</div>
+  <div class="chart-area" id="pressure-chart"></div>
+</div>
+
+</div>
+
+<table class="f-table">
+<thead>
+<tr>
+<th width="25%">Dzień</th>
+<th width="25%">Rano</th>
+<th width="25%">Południe</th>
+<th width="25%">Wieczór</th>
+</tr>
+</thead>
+<tbody id="f-body"></tbody>
+</table>
+
+</div>
+
+<script>
+const LOC={lat:50.39,lon:18.90};
+const trans={'clearsky':'Czyste niebo','fair':'Pogodnie','partlycloudy':'Zachmurzenie','cloudy':'Pochmurno','lightrain':'Lekki deszcz','rain':'Deszcz','heavyrain':'Ulewa','lightsnow':'Lekki śnieg','snow':'Śnieg','heavysnow':'Śnieżyca','fog':'Mgła','sleet':'Deszcz ze śniegiem','lightrainshowers':'Przelotny deszcz','rainshowers':'Deszcz','heavyrainshowers':'Ulewa','lightsnowshowers':'Przelotny śnieg'};
+function formatTemp(v){const r=Math.round(v);return r<0?`&minus;&nbsp;${Math.abs(r)}°`:`${r}°`;}
+function getIconUrl(code){return "https://corsproxy.io/?" + encodeURIComponent(`https://raw.githubusercontent.com/metno/weathericons/main/weather/svg/${code}.svg`);}
+
+async function getSun(){
+try{
+const r=await fetch(`https://api.sunrise-sunset.org/json?lat=${LOC.lat}&lng=${LOC.lon}&formatted=0`);
+const d=await r.json();
+const f=(iso)=>new Date(iso).toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
+sunrise.innerText=f(d.results.sunrise);
+sunset.innerText=f(d.results.sunset);
+}catch(e){}
+}
+
+function updateClock(){
+const now=new Date();
+const days=['NIEDZIELA','PONIEDZIAŁEK','WTOREK','ŚRODA','CZWARTEK','PIĄTEK','SOBOTA'];
+clock.innerText=`${days[now.getDay()]}, ${now.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} | ${now.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+async function update(){
+const proxy="https://corsproxy.io/?" + encodeURIComponent(`https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${LOC.lat}&lon=${LOC.lon}`);
+try{
+const r=await fetch(proxy);
+const d=await r.json();
+const series=d.properties.timeseries;
+const inst=series[0].data.instant.details;
+
+m-temp.innerHTML=formatTemp(inst.air_temperature);
+const nextT=series[1].data.instant.details.air_temperature;
+t-trend.innerText=Math.abs(nextT-inst.air_temperature)<0.2?'→':(nextT>inst.air_temperature?'↗':'↘');
+
+let ws=inst.wind_speed*3.6;
+let fl=inst.air_temperature;
+if(fl<=10 && ws>4) fl=13.12+0.6215*fl-11.37*Math.pow(ws,0.16)+0.3965*fl*Math.pow(ws,0.16);
+f-temp.innerHTML=fl.toFixed(1);
+
+press.innerText=Math.round(inst.air_pressure_at_sea_level);
+humid.innerText=Math.round(inst.relative_humidity);
+w-speed.innerText=Math.round(ws);
+w-arr.style.transform=`rotate(${inst.wind_from_direction+180}deg)`;
+
+const dirs=['N','NE','E','SE','S','SW','W','NW'];
+w-meta.innerText=Math.round(inst.wind_from_direction)+'° '+dirs[Math.round(inst.wind_from_direction/45)%8];
+
+const symCode=series[0].data.next_1_hours.summary.symbol_code;
+m-icon.src=getIconUrl(symCode);
+m-desc.innerText=(trans[symCode.split('_')[0]]||symCode).toUpperCase();
+
+status.innerText="OK";
+}catch(e){status.innerText="BŁĄD";}
+}
+
+setInterval(updateClock,1000);
+setInterval(update,600000);
+updateClock();update();getSun();
 </script>
+
+</body>
+</html>
