@@ -24,7 +24,6 @@ body{
   background:linear-gradient(135deg,#0f172a,#1e293b);
   color:var(--text);
   height:100dvh;
-  overflow:hidden;
 }
 
 .widget{
@@ -34,8 +33,6 @@ body{
   height:100%;
 }
 
-/* HEADER */
-
 .header{margin-bottom:2vmin;}
 
 .header-top{
@@ -44,17 +41,8 @@ body{
   align-items:flex-end;
 }
 
-.city{
-  font-size:5vmin;
-  font-weight:900;
-  letter-spacing:3px;
-}
-
-.time{
-  font-size:2.2vmin;
-  color:var(--accent);
-  font-weight:600;
-}
+.city{font-size:5vmin;font-weight:900;letter-spacing:3px;}
+.time{font-size:2.2vmin;color:var(--accent);font-weight:600;}
 
 .header-sub{
   margin-top:1vmin;
@@ -64,11 +52,9 @@ body{
   justify-content:space-between;
 }
 
-/* MAIN GRID */
-
 .main-grid{
   display:grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-columns:1.2fr 1fr 1fr;
   gap:2vmin;
   margin-bottom:2vmin;
   height:38vmin;
@@ -85,71 +71,25 @@ body{
   border:1px solid var(--border);
 }
 
-/* TEMPERATURE */
+.temp-row{display:flex;align-items:center;gap:3vmin;}
 
-.temp-row{
-  display:flex;
-  align-items:center;
-  gap:3vmin;
-}
+.main-icon{width:14vmin;height:14vmin;filter:brightness(1.2);}
+.main-temp{font-size:11vmin;font-weight:900;}
 
-.main-icon{
-  width:14vmin;
-  height:14vmin;
-  filter:brightness(1.2);
-}
+.trend-label{font-size:1.2vmin;color:var(--muted);}
+.temp-trend{font-size:5vmin;}
+.feels{margin-top:2vmin;font-size:1.8vmin;color:var(--muted);}
 
-.main-temp{
-  font-size:11vmin;
-  font-weight:900;
-}
-
-.trend-container{text-align:center;}
-
-.trend-label{
-  font-size:1.2vmin;
-  color:var(--muted);
-}
-
-.temp-trend{
-  font-size:5vmin;
-}
-
-.feels{
-  margin-top:2vmin;
-  font-size:1.8vmin;
-  color:var(--muted);
-}
-
-/* INFO */
-
-.condition{
-  font-size:2.3vmin;
-  font-weight:700;
-  margin-bottom:2vmin;
-  color:var(--accent);
-}
-
-.line{
-  font-size:2vmin;
-  margin-bottom:1vmin;
-  display:flex;
-  align-items:center;
-  gap:1.5vmin;
-}
-
+.condition{font-size:2.3vmin;font-weight:700;margin-bottom:2vmin;color:var(--accent);}
+.line{font-size:2vmin;margin-bottom:1vmin;display:flex;align-items:center;gap:1.5vmin;}
 .w-tag{
   background:rgba(255,255,255,0.06);
   padding:0.6vmin 1.2vmin;
   border-radius:8px;
-  display:flex;
-  align-items:center;
-  gap:1vmin;
-  font-size:1.7vmin;
+  display:flex;align-items:center;
+  gap:1vmin;font-size:1.7vmin;
   color:var(--muted);
 }
-
-/* CHART */
 
 .chart-title{
   font-size:1.4vmin;
@@ -170,7 +110,6 @@ body{
   width:100%;
   background:linear-gradient(to top,var(--accent),#0ea5e9);
   border-radius:4px;
-  transition:0.3s;
 }
 
 .bar-label{
@@ -179,45 +118,13 @@ body{
   color:var(--muted);
 }
 
-/* TABLE */
-
-.f-table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-.f-table th{
-  text-align:left;
-  font-size:1.5vmin;
-  font-weight:600;
-  color:var(--muted);
-  padding-bottom:1vmin;
-}
-
-.f-table td{
-  padding:1.6vmin 0;
-  border-top:1px solid var(--border);
-}
-
-.f-day-name{
-  font-size:2.5vmin;
-  font-weight:700;
-}
-
-.f-day-date{
-  font-size:1.5vmin;
-  color:var(--muted);
-}
-
-.f-icon{
-  width:5vmin;
-  filter:brightness(1.2);
-}
-
-.f-temp{
-  font-size:3.5vmin;
-  font-weight:700;
-}
+.f-table{width:100%;border-collapse:collapse;}
+.f-table th{text-align:left;font-size:1.5vmin;font-weight:600;color:var(--muted);}
+.f-table td{padding:1.6vmin 0;border-top:1px solid var(--border);}
+.f-day-name{font-size:2.5vmin;font-weight:700;}
+.f-day-date{font-size:1.5vmin;color:var(--muted);}
+.f-icon{width:5vmin;filter:brightness(1.2);}
+.f-temp{font-size:3.5vmin;font-weight:700;}
 
 #status{color:var(--accent);font-weight:600;}
 </style>
@@ -244,10 +151,8 @@ body{
     <img id="m-icon" class="main-icon" src="">
     <div>
       <div class="main-temp" id="m-temp">--°</div>
-      <div class="trend-container">
-        <div class="trend-label">TREND</div>
-        <div class="temp-trend" id="t-trend"></div>
-      </div>
+      <div class="trend-label">TREND</div>
+      <div class="temp-trend" id="t-trend"></div>
     </div>
   </div>
   <div class="feels">ODCZUWALNA: <span id="f-temp">--</span>°C</div>
@@ -257,7 +162,7 @@ body{
   <div class="condition" id="m-desc">ŁADOWANIE...</div>
   <div class="line">WIATR: <b id="w-speed">--</b> km/h
     <div class="w-tag">
-      <svg id="w-arr" width="20" height="20" viewBox="0 0 100 100" style="transition:1s">
+      <svg id="w-arr" width="20" height="20" viewBox="0 0 100 100">
         <path d="M50 5 L65 95 L50 80 L35 95 Z" fill="#94a3b8"/>
       </svg>
       <span id="w-meta">--</span>
@@ -277,10 +182,10 @@ body{
 <table class="f-table">
 <thead>
 <tr>
-<th width="25%">Dzień</th>
-<th width="25%">Rano</th>
-<th width="25%">Południe</th>
-<th width="25%">Wieczór</th>
+<th>Dzień</th>
+<th>Rano</th>
+<th>Południe</th>
+<th>Wieczór</th>
 </tr>
 </thead>
 <tbody id="f-body"></tbody>
@@ -290,62 +195,33 @@ body{
 
 <script>
 const LOC={lat:50.39,lon:18.90};
-const trans={'clearsky':'Czyste niebo','fair':'Pogodnie','partlycloudy':'Zachmurzenie','cloudy':'Pochmurno','lightrain':'Lekki deszcz','rain':'Deszcz','heavyrain':'Ulewa','lightsnow':'Lekki śnieg','snow':'Śnieg','heavysnow':'Śnieżyca','fog':'Mgła','sleet':'Deszcz ze śniegiem','lightrainshowers':'Przelotny deszcz','rainshowers':'Deszcz','heavyrainshowers':'Ulewa','lightsnowshowers':'Przelotny śnieg'};
-function formatTemp(v){const r=Math.round(v);return r<0?`&minus;&nbsp;${Math.abs(r)}°`:`${r}°`;}
+const trans={'clearsky':'Czyste niebo','fair':'Pogodnie','partlycloudy':'Zachmurzenie','cloudy':'Pochmurno','lightrain':'Lekki deszcz','rain':'Deszcz','heavyrain':'Ulewa','lightsnow':'Lekki śnieg','snow':'Śnieg','heavysnow':'Śnieżyca','fog':'Mgła','sleet':'Deszcz ze śniegiem','lighrainshowers':'Przelotny deszcz'};
+
+function formatTemp(v){const r=Math.round(v);return r<0?`-${Math.abs(r)}°`:`${r}°`;}
 function getIconUrl(code){return "https://corsproxy.io/?" + encodeURIComponent(`https://raw.githubusercontent.com/metno/weathericons/main/weather/svg/${code}.svg`);}
 
-async function getSun(){
-try{
-const r=await fetch(`https://api.sunrise-sunset.org/json?lat=${LOC.lat}&lng=${LOC.lon}&formatted=0`);
-const d=await r.json();
-const f=(iso)=>new Date(iso).toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
-sunrise.innerText=f(d.results.sunrise);
-sunset.innerText=f(d.results.sunset);
-}catch(e){}
-}
-
-function updateClock(){
-const now=new Date();
-const days=['NIEDZIELA','PONIEDZIAŁEK','WTOREK','ŚRODA','CZWARTEK','PIĄTEK','SOBOTA'];
-clock.innerText=`${days[now.getDay()]}, ${now.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} | ${now.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})}`;
-}
-
 async function update(){
-const proxy="https://corsproxy.io/?" + encodeURIComponent(`https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${LOC.lat}&lon=${LOC.lon}`);
 try{
-const r=await fetch(proxy);
+const r=await fetch("https://corsproxy.io/?"+encodeURIComponent(`https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${LOC.lat}&lon=${LOC.lon}`));
 const d=await r.json();
 const series=d.properties.timeseries;
 const inst=series[0].data.instant.details;
 
-m-temp.innerHTML=formatTemp(inst.air_temperature);
-const nextT=series[1].data.instant.details.air_temperature;
-t-trend.innerText=Math.abs(nextT-inst.air_temperature)<0.2?'→':(nextT>inst.air_temperature?'↗':'↘');
+document.getElementById("m-temp").innerHTML=formatTemp(inst.air_temperature);
+document.getElementById("press").innerText=Math.round(inst.air_pressure_at_sea_level);
+document.getElementById("humid").innerText=Math.round(inst.relative_humidity);
 
-let ws=inst.wind_speed*3.6;
-let fl=inst.air_temperature;
-if(fl<=10 && ws>4) fl=13.12+0.6215*fl-11.37*Math.pow(ws,0.16)+0.3965*fl*Math.pow(ws,0.16);
-f-temp.innerHTML=fl.toFixed(1);
+document.getElementById("w-speed").innerText=Math.round(inst.wind_speed*3.6);
+document.getElementById("m-desc").innerText="AKTUALNE WARUNKI";
 
-press.innerText=Math.round(inst.air_pressure_at_sea_level);
-humid.innerText=Math.round(inst.relative_humidity);
-w-speed.innerText=Math.round(ws);
-w-arr.style.transform=`rotate(${inst.wind_from_direction+180}deg)`;
-
-const dirs=['N','NE','E','SE','S','SW','W','NW'];
-w-meta.innerText=Math.round(inst.wind_from_direction)+'° '+dirs[Math.round(inst.wind_from_direction/45)%8];
-
-const symCode=series[0].data.next_1_hours.summary.symbol_code;
-m-icon.src=getIconUrl(symCode);
-m-desc.innerText=(trans[symCode.split('_')[0]]||symCode).toUpperCase();
-
-status.innerText="OK";
-}catch(e){status.innerText="BŁĄD";}
+document.getElementById("status").innerText="OK";
+}catch(e){
+document.getElementById("status").innerText="BŁĄD API";
+}
 }
 
-setInterval(updateClock,1000);
+update();
 setInterval(update,600000);
-updateClock();update();getSun();
 </script>
 
 </body>
